@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var JoueurSchema = new Schema({
+    name: String,
     habileteBase: Number,
     habiletePlus: Number,
     enduranceBase: Number,

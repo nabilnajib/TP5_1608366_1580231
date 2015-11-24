@@ -36,11 +36,17 @@ section label {
     display: block;
     margin: 0 0 10px 10px;
 }
-
-div#gauche, div#droite {
-    width: 250px;
+div#discipline{
+    display: inline;
+    float: left;
 }
 
+div#gauche {
+    width: 175px;
+}
+div#droite{
+    width: 250px;
+}
 div {
     display: inline-block;
     vertical-align: top;

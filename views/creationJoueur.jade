@@ -14,9 +14,14 @@ block content
                     li=e
         form(name="userForm" novalidate, ng-controller="verifierFormualire")
             fieldset
+                div
+                    label
+                        | Joueur:
+                        input(type="text", placeholder=" le nom du joueur", name="joueurName")
+            fieldset
                 legend Disciplines
                 p Choisir 5 disciplines:
-                div
+                div#discipline
                     div#gauche
                         label
                             input(type="checkbox", name="discipline", value=c.discipline.CAMOUFLAGE, ng-model="c.discipline.CAMOUFLAGE", ng-init="c.discipline.CAMOUFLAGE=true", ng-click="submitForm()")
@@ -49,7 +54,6 @@ block content
                         label
                             input(type="checkbox", name="discipline", value=c.discipline.MAITRISE_PSYCHIQUE_MATIERE, ng-model="c.discipline.MAITRISE_PSYCHIQUE_MATIERE" ng-click="submitForm()")
                             | Maîtrise Psychique de la Matière
-                div(ng-show="countDiscip != 5" class="ng-cloak") Choisir 5 disciplines:
             fieldset
                 legend Équipement
                 p Choisir 2 items:
@@ -87,6 +91,5 @@ block content
                     label
                         input(type="checkbox", name="objet", value=c.objet.RATIONS_SPECIALES, ng-model="c.arme.RATIONS_SPECIALES" ng-click="submitForm()")
                         | Rations spéciales (Objet dans le sac à dos)
-                    div(ng-show="countArm != 2" class="ng-cloak") Il faut choisir 2 armes {{isValid}}
             button.button(value="Commencer la partie!" ng-disabled="!isValid" ng-click="submitButton()") Commencer la partie!
 
