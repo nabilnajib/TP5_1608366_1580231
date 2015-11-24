@@ -64,7 +64,7 @@ router.post('/jeu/1', function(req, res) {
             } else {
                 rest.post('http://localhost:3000/api/joueurs/avancement/' + joueur.id)
                 .on('complete', function(data, response) {
-                    console.log(response);
+                    //console.log(response);
                 });
                 req.session.joueur = joueur;
                 res.redirect('/jeu/1');
