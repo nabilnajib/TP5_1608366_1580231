@@ -36,6 +36,11 @@ section label {
     display: block;
     margin: 0 0 10px 10px;
 }
+div#affichageJoueur{
+    display: inline-block;
+    vertical-align: top;
+    margin: 10px 20px;
+}
 div#discipline{
     display: inline;
     float: left;

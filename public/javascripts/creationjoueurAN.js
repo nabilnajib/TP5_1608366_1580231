@@ -17,10 +17,18 @@ myApp.controller('verifierFormualire', function($scope){
         });
         //alert($scope.countDiscip +" "+ $scope.countArm);
         $scope.isValid = (countDiscip == 5 && countArm == 2);
-
     }
     $scope.submitButton = function(){
-        if($scope.isValid)
+        if($scope.isValid) {
             alert('YOU MADE IT!!!');
+            $http({
+                url: '/jeu/1',
+                method: "POST",
+                data: { 'message' : $scope }
+            })
+                .then(function(response) {
+                    alert('YOU MADE IT AGAIN!!!');
+                });
+        }
     }
 });

@@ -7,12 +7,19 @@ block content
 
     section
         h1 Création du personnage
-
+        div#affichageJoueur
+            - if(joueur.length)
+                fieldset
+                    legend joueurs
+                    ul
+                        each j in joueur
+                           div
+                                a(href="#")  j.name
         div#erreurs
             ul
                 each e in erreursMsg
                     li=e
-        form(name="userForm" novalidate, ng-controller="verifierFormualire")
+        form(action="/jeu/1" method="post" name="userForm" novalidate, ng-controller="verifierFormualire")
             fieldset
                 div
                     label
@@ -91,5 +98,5 @@ block content
                     label
                         input(type="checkbox", name="objet", value=c.objet.RATIONS_SPECIALES, ng-model="c.arme.RATIONS_SPECIALES" ng-click="submitForm()")
                         | Rations spéciales (Objet dans le sac à dos)
-            button.button(value="Commencer la partie!" ng-disabled="!isValid" ng-click="submitButton()") Commencer la partie!
+            input.button(type="submit" value="Commencer la partie!" ng-disabled="!isValid" ng-click="submitButton()")
 

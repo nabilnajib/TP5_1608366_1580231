@@ -9,17 +9,24 @@ var Avancement = require('../models/avancement');
 
 // GET page de création du joueur.
 router.get('/creationJoueur', function(req, res, next) {
-    res.render('creationJoueur', {
-        c: constantes,
-        erreursMsg: []
+
+    Joueur.find({}, function(err, joueur){
+        //console.log(docs);
+        res.render('creationJoueur', {
+            joueur: joueur,
+            c: constantes,
+            erreursMsg: []
+        });
     });
 });
 
 // POST page de création du joueur
 router.post('/jeu/1', function(req, res) {
+    //console.log(req);
     var erreursMsg = [];
 
     // Récupération des données du formulaire
+    var joueurName = req.body.joueurName;
     var disciplines = (req.body.discipline) ? [].concat(req.body.discipline) : [];
     var armes = (req.body.arme) ? [].concat(req.body.arme) : [];
     var objets = (req.body.objet) ? [].concat(req.body.objet) : [];
@@ -36,6 +43,10 @@ router.post('/jeu/1', function(req, res) {
         erreursMsg.push("Vous ne pouvez pas choisir une arme si vous ne maîtriser pas la discipline de Maîtrise des Armes.");
     }
 
+    //Verification de l'existance du nom du joueur
+    if (!joueurName || 0 === joueurName.length) {
+        erreursMsg.push("Vous devez choisir Nom de joueur avant d'aller plus loin");
+    }
     // Traitement des objets choisis
     var NB_OBJET = 2;
     var nbObjetsChoisis = armes.length + objets.length + objetsSpeciaux.length;
@@ -47,6 +58,7 @@ router.post('/jeu/1', function(req, res) {
     // liste d'erreurs. Sinon, on se dirige vers la 1ere page de l'histoire.
     if (u.isEmpty(erreursMsg)) {
         var joueur = new Joueur;
+        joueur.name=joueurName;
         joueur.habileteBase = u.random(10, 19);
         joueur.enduranceBase = u.random(20, 29);
         joueur.pieceOr = u.random(10, 19);
@@ -71,9 +83,17 @@ router.post('/jeu/1', function(req, res) {
             }
         });
     } else {
-        res.render('creationJoueur', {
-            c: constantes,
-            erreursMsg: erreursMsg
+//        res.render('creationJoueur', {
+//            c: constantes,
+//            erreursMsg: erreursMsg
+//        });
+        Joueur.find({}, function(err, joueur){
+            //console.log(docs);
+            res.render('creationJoueur', {
+                joueur: joueur,
+                c: constantes,
+                erreursMsg: []
+            });
         });
     }
 });
