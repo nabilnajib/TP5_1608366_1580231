@@ -12,7 +12,12 @@ img {
     margin: 20px auto 10px;
     display: block;
 }
-
+img#delete{
+    width: 20px;
+    height: 20px;
+    margin: 0px;
+    display: inline-block;
+}
 fieldset {
     margin-bottom: 30px;
     border: 2px solid black;
@@ -20,6 +25,11 @@ fieldset {
     -moz-border-radius:8px;
     -webkit-border-radius:8px;
     border-radius:8px;
+}
+fieldset#personnageExistant{
+    margin-left: 0px;
+    width: 570px;
+    height: auto;
 }
 
 legend {
@@ -30,6 +40,12 @@ legend {
 
 form p {
     margin: 20px 20px;
+}
+#deleteBtn{
+    background-image: url(../images/DeleteRed.png);
+    width: 20px;
+    height: 20px;
+    margin: 0px;
 }
 
 section label {
@@ -64,4 +80,17 @@ form label input {
 
 .button {
   line-height: 55px;
+}
+ul#joueurUL{
+    position: relative;
+    top: 0px;
+    bottom: 0px;
+}
+li#joueurLI{
+    margin-bottom: 0px;
+    top: 0px;
+    bottom: 0px;
+}
+.buttonDelete {
+    line-height: 20px;
 }

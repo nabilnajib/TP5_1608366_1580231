@@ -4,99 +4,105 @@ block head
     link(rel="stylesheet", href="/stylesheets/creationJoueur.css")
 block content
     img(src="/images/loup_solitaire.png")
-
     section
-        h1 Création du personnage
-        div#affichageJoueur
+        div(ng-controller="verifierFormualire")
             - if(joueur.length)
+                h1 Personnage existant
+                div#affichageJoueur(ng-click="load()")
+                    fieldset#personnageExistant
+                        legend Joueurs
+                        ul#joueurUL
+                            each elem in joueur
+                               li#joueurLI
+                                   -joueurId = elem.id
+                                    a(ng-click="supprimerJoueur($event)" class="buttonDelete" data-id="#{elem.id}")
+                                        img#delete(src="/images/DeleteRed.png")
+                                    a(href="#") #{elem.name}
+            h1 Création du personnage
+            div#erreurs
+                ul
+                    each e in erreursMsg
+                        li=e
+            form(action="/jeu/1" method="post" name="userForm" novalidate)
                 fieldset
-                    legend joueurs
-                    ul
-                        each j in joueur
-                           div
-                                a(href="#")  j.name
-        div#erreurs
-            ul
-                each e in erreursMsg
-                    li=e
-        form(action="/jeu/1" method="post" name="userForm" novalidate, ng-controller="verifierFormualire")
-            fieldset
-                div
-                    label
-                        | Joueur:
-                        input(type="text", placeholder=" le nom du joueur", name="joueurName")
-            fieldset
-                legend Disciplines
-                p Choisir 5 disciplines:
-                div#discipline
-                    div#gauche
+                    div
                         label
-                            input(type="checkbox", name="discipline", value=c.discipline.CAMOUFLAGE, ng-model="c.discipline.CAMOUFLAGE", ng-init="c.discipline.CAMOUFLAGE=true", ng-click="submitForm()")
-                            | Le camouflage
+                            | Joueur:
+                            input(type="text", placeholder=" le nom du joueur", name="joueurName", ng-model="joueurName")
+                    div#erreurs(ng-show="joueurName == ''", class="ng-cloak")
+                        p Il faut saisir un nom pour le joueur
+                fieldset
+                    legend Disciplines
+                    p Choisir 5 disciplines:
+                    div#discipline
+                        div#gauche
+                            label
+                                input(type="checkbox", name="discipline", value=c.discipline.CAMOUFLAGE, ng-model="c.discipline.CAMOUFLAGE", ng-init="c.discipline.CAMOUFLAGE=true", ng-click="submitForm()")
+                                | Le camouflage
+                            label
+                                input(type="checkbox", name="discipline", value=c.discipline.CHASSE, ng-model="c.discipline.CHASSE", ng-init="c.discipline.CHASSE=true", ng-click="submitForm()")
+                                | La chasse
+                            label
+                                input(type="checkbox", name="discipline", value=c.discipline.SIXIEME_SENS, ng-model="c.discipline.SIXIEME_SENS", ng-init="c.discipline.SIXIEME_SENS=true",  ng-click="submitForm()")
+                                | Sixième Sens
+                            label
+                                input(type="checkbox", name="discipline", value=c.discipline.ORIENTATION, ng-model="c.discipline.ORIENTATION", ng-init="c.discipline.ORIENTATION=true",  ng-click="submitForm()")
+                                | L'Orientation
+                            label
+                                input(type="checkbox", name="discipline", value=c.discipline.GUERISON, ng-model="c.discipline.GUERISON", ng-init="c.discipline.GUERISON=true",  ng-click="submitForm()")
+                                | La guérison
+                        div#droite
+                            label
+                                input(type="checkbox", name="discipline", value=c.discipline.MAITRISE_ARMES, ng-model="c.discipline.MAITRISE_ARMES" ng-click="submitForm()")
+                                | La Maîtrise des Armes
+                            label
+                                input(type="checkbox", name="discipline", value=c.discipline.BOUCLIER_PSYCHIQUE, ng-model="c.discipline.BOUCLIER_PSYCHIQUE" ng-click="submitForm()")
+                                | Bouclier Psychique
+                            label
+                                input(type="checkbox", name="discipline", value=c.discipline.PUISSANCE_PSYCHIQUE, ng-model="c.discipline.PUISSANCE_PSYCHIQUE" ng-click="submitForm()")
+                                | Puissance Psychique
+                            label
+                                input(type="checkbox", name="discipline", value=c.discipline.COMMUNICATION_ANIMALE, ng-model="c.discipline.COMMUNICATION_ANIMALE" ng-click="submitForm()")
+                                | Communication Animale
+                            label
+                                input(type="checkbox", name="discipline", value=c.discipline.MAITRISE_PSYCHIQUE_MATIERE, ng-model="c.discipline.MAITRISE_PSYCHIQUE_MATIERE" ng-click="submitForm()")
+                                | Maîtrise Psychique de la Matière
+                fieldset
+                    legend Équipement
+                    p Choisir 2 items:
+                    div
                         label
-                            input(type="checkbox", name="discipline", value=c.discipline.CHASSE, ng-model="c.discipline.CHASSE", ng-init="c.discipline.CHASSE=true", ng-click="submitForm()")
-                            | La chasse
+                            input(type="checkbox", name="arme", value=c.arme.EPEE, ng-model="c.arme.EPEE" ng-click="submitForm()")
+                            | Épée (Arme)
                         label
-                            input(type="checkbox", name="discipline", value=c.discipline.SIXIEME_SENS, ng-model="c.discipline.SIXIEME_SENS", ng-init="c.discipline.SIXIEME_SENS=true",  ng-click="submitForm()")
-                            | Sixième Sens
+                            input(type="checkbox", name="arme", value=c.arme.SABRE, ng-model="c.arme.SABRE" ng-click="submitForm()")
+                            | Sabre (Arme)
                         label
-                            input(type="checkbox", name="discipline", value=c.discipline.ORIENTATION, ng-model="c.discipline.ORIENTATION", ng-init="c.discipline.ORIENTATION=true",  ng-click="submitForm()")
-                            | L'Orientation
+                            input(type="checkbox", name="arme", value=c.arme.LANCE, ng-model="c.arme.LANCE" ng-click="submitForm()")
+                            | Lance (Arme)
                         label
-                            input(type="checkbox", name="discipline", value=c.discipline.GUERISON, ng-model="c.discipline.GUERISON", ng-init="c.discipline.GUERISON=true",  ng-click="submitForm()")
-                            | La guérison
-                    div#droite
+                            input(type="checkbox", name="arme", value=c.arme.MASSE_ARME, ng-model="c.arme.MASSE_ARME" ng-click="submitForm()")
+                            | Masse d'Arme (Arme)
                         label
-                            input(type="checkbox", name="discipline", value=c.discipline.MAITRISE_ARMES, ng-model="c.discipline.MAITRISE_ARMES" ng-click="submitForm()")
-                            | La Maîtrise des Armes
+                            input(type="checkbox", name="arme", value=c.arme.MARTEAU_GUERRE, ng-model="c.arme.MARTEAU_GUERRE" ng-click="submitForm()")
+                            | Marteau de Guerre (Arme)
                         label
-                            input(type="checkbox", name="discipline", value=c.discipline.BOUCLIER_PSYCHIQUE, ng-model="c.discipline.BOUCLIER_PSYCHIQUE" ng-click="submitForm()")
-                            | Bouclier Psychique
+                            input(type="checkbox", name="arme", value=c.arme.HACHE, ng-model="c.arme.HACHE" ng-click="submitForm()")
+                            | Hâche (Arme)
                         label
-                            input(type="checkbox", name="discipline", value=c.discipline.PUISSANCE_PSYCHIQUE, ng-model="c.discipline.PUISSANCE_PSYCHIQUE" ng-click="submitForm()")
-                            | Puissance Psychique
+                            input(type="checkbox", name="arme", value=c.arme.BATON, ng-model="c.arme.BATON" ng-click="submitForm()")
+                            | Bâton (Arme)
                         label
-                            input(type="checkbox", name="discipline", value=c.discipline.COMMUNICATION_ANIMALE, ng-model="c.discipline.COMMUNICATION_ANIMALE" ng-click="submitForm()")
-                            | Communication Animale
+                            input(type="checkbox", name="arme", value=c.arme.GLAIVE, ng-model="c.arme.GLAIVE" ng-click="submitForm()")
+                            | Glaive (Arme)
                         label
-                            input(type="checkbox", name="discipline", value=c.discipline.MAITRISE_PSYCHIQUE_MATIERE, ng-model="c.discipline.MAITRISE_PSYCHIQUE_MATIERE" ng-click="submitForm()")
-                            | Maîtrise Psychique de la Matière
-            fieldset
-                legend Équipement
-                p Choisir 2 items:
-                div
-                    label
-                        input(type="checkbox", name="arme", value=c.arme.EPEE, ng-model="c.arme.EPEE" ng-click="submitForm()")
-                        | Épée (Arme)
-                    label
-                        input(type="checkbox", name="arme", value=c.arme.SABRE, ng-model="c.arme.SABRE" ng-click="submitForm()")
-                        | Sabre (Arme)
-                    label
-                        input(type="checkbox", name="arme", value=c.arme.LANCE, ng-model="c.arme.LANCE" ng-click="submitForm()")
-                        | Lance (Arme)
-                    label
-                        input(type="checkbox", name="arme", value=c.arme.MASSE_ARME, ng-model="c.arme.MASSE_ARME" ng-click="submitForm()")
-                        | Masse d'Arme (Arme)
-                    label
-                        input(type="checkbox", name="arme", value=c.arme.MARTEAU_GUERRE, ng-model="c.arme.MARTEAU_GUERRE" ng-click="submitForm()")
-                        | Marteau de Guerre (Arme)
-                    label
-                        input(type="checkbox", name="arme", value=c.arme.HACHE, ng-model="c.arme.HACHE" ng-click="submitForm()")
-                        | Hâche (Arme)
-                    label
-                        input(type="checkbox", name="arme", value=c.arme.BATON, ng-model="c.arme.BATON" ng-click="submitForm()")
-                        | Bâton (Arme)
-                    label
-                        input(type="checkbox", name="arme", value=c.arme.GLAIVE, ng-model="c.arme.GLAIVE" ng-click="submitForm()")
-                        | Glaive (Arme)
-                    label
-                        input(type="checkbox", name="objetSpecial", value=c.objetSpecial.GILET_CUIR_MARTELE, ng-model="c.arme.GILET_CUIR_MARTELE", ng-init="c.arme.GILET_CUIR_MARTELE=true", ng-click="submitForm()")
-                        | Gilet de Cuir Martelé (Objet Spécial)
-                    label
-                        input(type="checkbox", name="objet", value=c.objet.POTION_LAMPSUR, ng-model="c.arme.POTION_LAMPSUR", ng-init="c.arme.POTION_LAMPSUR=true", ng-click="submitForm()")
-                        | Potion de Lampsur (Objet dans le sac à dos)
-                    label
-                        input(type="checkbox", name="objet", value=c.objet.RATIONS_SPECIALES, ng-model="c.arme.RATIONS_SPECIALES" ng-click="submitForm()")
-                        | Rations spéciales (Objet dans le sac à dos)
-            input.button(type="submit" value="Commencer la partie!" ng-disabled="!isValid" ng-click="submitButton()")
+                            input(type="checkbox", name="objetSpecial", value=c.objetSpecial.GILET_CUIR_MARTELE, ng-model="c.arme.GILET_CUIR_MARTELE", ng-init="c.arme.GILET_CUIR_MARTELE=true", ng-click="submitForm()")
+                            | Gilet de Cuir Martelé (Objet Spécial)
+                        label
+                            input(type="checkbox", name="objet", value=c.objet.POTION_LAMPSUR, ng-model="c.arme.POTION_LAMPSUR", ng-init="c.arme.POTION_LAMPSUR=true", ng-click="submitForm()")
+                            | Potion de Lampsur (Objet dans le sac à dos)
+                        label
+                            input(type="checkbox", name="objet", value=c.objet.RATIONS_SPECIALES, ng-model="c.arme.RATIONS_SPECIALES" ng-click="submitForm()")
+                            | Rations spéciales (Objet dans le sac à dos)
+                input.button(type="submit" value="Commencer la partie!" ng-disabled="!isValid" ng-click="submitButton($event)")
 

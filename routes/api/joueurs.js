@@ -40,6 +40,7 @@ router.get('/:id?', function(req, res) {
  * @param id Id du joueur
  */
 router.put('/:id', function(req, res) {
+
     var id = req.params.id;
     Joueur.findById(id, function(err, joueur) {
         if (err) {
@@ -73,7 +74,9 @@ router.delete('/:id', function(req, res) {
                 if (err) {
                     res.send(err);
                 } else {
-                    res.json({ message: "Le joueur et son avancement ont été correctement supprimé." });
+                    Joueur.find({}, function(err, joueurs) {
+                        res.json({ message: "Le joueur et son avancement ont été correctement supprimé.", joueur: joueur });
+                    });
                 }
             });
         }

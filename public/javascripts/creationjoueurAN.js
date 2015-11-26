@@ -1,8 +1,10 @@
 var myApp = angular.module('myApp', []);
 
-myApp.controller('verifierFormualire', function($scope){
+myApp.controller('verifierFormualire', function($scope, $http){
 
     $scope.isValid = true;
+    $scope.joueurName = '';
+    $scope.joueurId = '';
     $scope.submitForm = function() {
         //alert('test');
         var countDiscip = 0;
@@ -15,20 +17,33 @@ myApp.controller('verifierFormualire', function($scope){
         {
             if (value) countArm++;
         });
-        //alert($scope.countDiscip +" "+ $scope.countArm);
-        $scope.isValid = (countDiscip == 5 && countArm == 2);
+        $scope.isValid = (countDiscip == 5 && countArm == 2 && $scope.joueurName.length !== 0);
     }
-    $scope.submitButton = function(){
-        if($scope.isValid) {
+    $scope.submitButton = function($event){
+        if($scope.isValid && $scope.joueurName.length !== 0) {
             alert('YOU MADE IT!!!');
-            $http({
-                url: '/jeu/1',
-                method: "POST",
-                data: { 'message' : $scope }
-            })
-                .then(function(response) {
-                    alert('YOU MADE IT AGAIN!!!');
-                });
         }
+        else{
+            $event.preventDefault();
+            alert('NOT GOOD!!!');
+        }
+    }
+    $scope.supprimerJoueur = function(obj){
+        //obj.preventDefault();
+
+        var id = angular.element(obj.currentTarget).attr('data-id');
+        $http.delete('api/joueurs/'+id, id).success(function (data, status) {
+            $("#affichageJoueur").load(location.href + " #affichageJoueur");
+        });
+//        $http({ url: 'api/joueurs/'+id,
+//            method: 'DELETE',
+//            data: {id: id},
+//            headers: {"Content-Type": "application/json;charset=utf-8"}
+//        }).then(function(res) {
+//                $window.location.reload();
+//                alert(res.data);
+//            }, function(error) {
+//                alert('error');
+//            });
     }
 });

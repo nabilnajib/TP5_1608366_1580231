@@ -11,7 +11,7 @@ var Avancement = require('../models/avancement');
 router.get('/creationJoueur', function(req, res, next) {
 
     Joueur.find({}, function(err, joueur){
-        //console.log(docs);
+        //console.log(joueur);
         res.render('creationJoueur', {
             joueur: joueur,
             c: constantes,
@@ -46,6 +46,7 @@ router.post('/jeu/1', function(req, res) {
     //Verification de l'existance du nom du joueur
     if (!joueurName || 0 === joueurName.length) {
         erreursMsg.push("Vous devez choisir Nom de joueur avant d'aller plus loin");
+        console.log(erreursMsg);
     }
     // Traitement des objets choisis
     var NB_OBJET = 2;
@@ -92,7 +93,7 @@ router.post('/jeu/1', function(req, res) {
             res.render('creationJoueur', {
                 joueur: joueur,
                 c: constantes,
-                erreursMsg: []
+                erreursMsg: erreursMsg
             });
         });
     }
