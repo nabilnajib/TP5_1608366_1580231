@@ -90,6 +90,7 @@ router.get('/:pageId/:sectionId', function(req, res) {
     var page = u.find(pagesJeu.pages, function(page) {
         return page.id == id && page.section == section;
     });
+    console.log(page);
     res.json(page);
 });
 

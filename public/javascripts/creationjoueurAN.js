@@ -29,21 +29,9 @@ myApp.controller('verifierFormualire', function($scope, $http){
         }
     }
     $scope.supprimerJoueur = function(obj){
-        //obj.preventDefault();
-
         var id = angular.element(obj.currentTarget).attr('data-id');
         $http.delete('api/joueurs/'+id, id).success(function (data, status) {
             $("#affichageJoueur").load(location.href + " #affichageJoueur");
         });
-//        $http({ url: 'api/joueurs/'+id,
-//            method: 'DELETE',
-//            data: {id: id},
-//            headers: {"Content-Type": "application/json;charset=utf-8"}
-//        }).then(function(res) {
-//                $window.location.reload();
-//                alert(res.data);
-//            }, function(error) {
-//                alert('error');
-//            });
     }
 });
