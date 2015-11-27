@@ -5,6 +5,12 @@ myApp.controller('verifierFormualire', function($scope, $http){
     $scope.isValid = true;
     $scope.joueurName = '';
     $scope.joueurId = '';
+    $scope.nbJoueur = [];
+    $scope.joueurCounter=true;
+    $http.get('api/joueurs/').success(function(data) {
+        $scope.joueurCounter= (data.length === 0) ? false : true;
+        $scope.nbJoueur = data;
+    });
     $scope.submitForm = function() {
         //alert('test');
         var countDiscip = 0;
@@ -31,7 +37,13 @@ myApp.controller('verifierFormualire', function($scope, $http){
     $scope.supprimerJoueur = function(obj){
         var id = angular.element(obj.currentTarget).attr('data-id');
         $http.delete('api/joueurs/'+id, id).success(function (data, status) {
-            $("#affichageJoueur").load(location.href + " #affichageJoueur");
+            $http.get('api/joueurs/').success(function(joueur) {
+                $scope.nbJoueur = joueur;
+                $scope.joueurCounter= (joueur.length === 0) ? false : true;
+                $scope.nbJoueur = joueur;
+            });
+//            alert(data);
         });
+//        $("#affichageJoueur").load(location.href + " #affichageJoueur");
     }
 });

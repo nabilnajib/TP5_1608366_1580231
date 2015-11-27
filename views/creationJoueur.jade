@@ -6,18 +6,16 @@ block content
     img(src="/images/loup_solitaire.png")
     section
         div(ng-controller="verifierFormualire")
-            - if(joueur.length)
+            div(ng-show="joueurCounter" id="affichageJoueur" ng-click="load()")
                 h1 Personnage existant
-                div#affichageJoueur(ng-click="load()")
+                div
                     fieldset#personnageExistant
                         legend Joueurs
                         ul#joueurUL
-                            each elem in joueur
-                               li#joueurLI
-                                   -joueurId = elem.id
-                                    a(ng-click="supprimerJoueur($event)" class="buttonDelete" data-id="#{elem.id}")
+                               li#joueurLI(ng-repeat="e in nbJoueur")
+                                    a(ng-click="supprimerJoueur($event)" class="buttonDelete" data-id="{{e._id}}")
                                         img#delete(src="/images/DeleteRed.png")
-                                    a(href="#") #{elem.name}
+                                    a(href="#") {{e.name}}
             h1 Création du personnage
             div#erreurs
                 ul
@@ -25,9 +23,10 @@ block content
                         li=e
             form(action="/jeu/1" method="post" name="userForm" novalidate)
                 fieldset
+                    legend Ajouter un joueur
                     div
                         label
-                            | Joueur:
+                            | Nom:
                             input(type="text", placeholder=" le nom du joueur", name="joueurName", ng-model="joueurName")
                     div#erreurs(ng-show="joueurName == ''", class="ng-cloak")
                         p Il faut saisir un nom pour le joueur
