@@ -15,7 +15,7 @@ block content
                                li#joueurLI(ng-repeat="e in nbJoueur")
                                     a(ng-click="supprimerJoueur($event)" class="buttonDelete" data-id="{{e._id}}")
                                         img#delete(src="/images/DeleteRed.png")
-                                    a(href="#") {{e.name}}
+                                    a(href ng-click="goToPlayerPage($event)" data-id="{{e._id}}") {{e.name}}
             h1 Création du personnage
             div#erreurs
                 ul

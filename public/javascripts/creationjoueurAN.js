@@ -42,8 +42,14 @@ myApp.controller('verifierFormualire', function($scope, $http){
                 $scope.joueurCounter= (joueur.length === 0) ? false : true;
                 $scope.nbJoueur = joueur;
             });
-//            alert(data);
         });
-//        $("#affichageJoueur").load(location.href + " #affichageJoueur");
+    }
+    $scope.goToPlayerPage = function(obj){
+        //$scope.avancement = {};
+        var id = angular.element(obj.currentTarget).attr('data-id');
+        $http.get('api/joueurs//avancement/'+id).success(function(avancement) {
+            //$scope.avancement = avancement;
+            window.location.href = '/jeu/'+ avancement.pageId;
+        });
     }
 });

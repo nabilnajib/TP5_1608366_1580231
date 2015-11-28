@@ -13,7 +13,6 @@ router.get('/creationJoueur', function(req, res, next) {
     Joueur.find({}, function(err, joueur){
         //console.log(joueur);
         res.render('creationJoueur', {
-            joueur: joueur,
             c: constantes,
             erreursMsg: []
         });
@@ -77,7 +76,7 @@ router.post('/jeu/1', function(req, res) {
             } else {
                 rest.post('http://localhost:3000/api/joueurs/avancement/' + joueur.id)
                 .on('complete', function(data, response) {
-                    //console.log(response);
+                   // console.log(response);
                 });
                 req.session.joueur = joueur;
                 res.redirect('/jeu/1');
