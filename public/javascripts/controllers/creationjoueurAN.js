@@ -3,8 +3,8 @@ var myApp = angular.module('myApp', ['ngCookies', 'ngResource', 'ngRoute']);
 myApp.config(function($locationProvider, $routeProvider) {
     $locationProvider.html5Mode(false);
     $routeProvider.when('http://localhost:3000/jeu/1', {
-        templateUrl: 'http://localhost:3000/jeu/78',
-        controller: 'homeController'
+        templateUrl: 'http://localhost:3000/jeu/1',
+        controller: 'statPlayer'
     });
 
 });
@@ -81,7 +81,11 @@ myApp.controller('verifierFormualire', ['$scope', '$http', '$cookies', function(
     }
     $scope.submitButton = function($event){
         if($scope.isValid && $scope.joueurName.length !== 0) {
-            alert('YOU MADE IT!!!');
+            alert('Le joueur est ajouté');
+            $cookies.remove('joueurId');
+            $http.get('api/joueurs/').success(function(joueur) {
+                $cookies.put('joueurId', joueur[0]._id);
+            });
         }
         else{
             $event.preventDefault();
@@ -110,18 +114,7 @@ myApp.controller('verifierFormualire', ['$scope', '$http', '$cookies', function(
 
 
 myApp.controller('statPlayer', function($scope, $http, $cookies){
-    /*
-    * name: String,
-     habileteBase: Number,
-     habiletePlus: Number,
-     enduranceBase: Number,
-     endurancePlus: Number,
-     pieceOr: Number,
-     disciplines: [String],
-     armes: [String],
-     objets: [String],
-     objetsSpeciaux: [String]
-    * */
+
     var id = $cookies.get('joueurId');
     $http.get('http://localhost:3000/api/joueurs/'+id).success(function(joueur) {
         $scope.nbJoueurName = joueur.name;

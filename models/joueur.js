@@ -11,7 +11,8 @@ var JoueurSchema = new Schema({
     disciplines: [String],
     armes: [String],
     objets: [String],
-    objetsSpeciaux: [String]
+    objetsSpeciaux: [String],
+    time: Date
 });
 
 module.exports = mongoose.model('Joueur', JoueurSchema);

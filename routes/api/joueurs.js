@@ -32,7 +32,7 @@ router.get('/:id?', function(req, res) {
             } else {
                 res.json(joueurs);
             }
-        });
+        }).sort({time:-1});
     }
 });
 

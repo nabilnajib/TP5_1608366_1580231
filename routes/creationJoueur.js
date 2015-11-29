@@ -68,6 +68,7 @@ router.post('/jeu/1', function(req, res) {
         joueur.objetsSpeciaux = objetsSpeciaux;
         joueur.habiletePlus = habiletePlus(joueur);
         joueur.endurancePlus = endurancePlus(joueur);
+        joueur.time = new Date().getTime();
 
         // On ajoute le joueur dans la session
         joueur.save(function(err, joueur) {
