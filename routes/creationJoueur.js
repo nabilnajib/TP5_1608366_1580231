@@ -78,7 +78,6 @@ router.post('/jeu/1', function(req, res) {
                 .on('complete', function(data, response) {
                    // console.log(response);
                 });
-                req.session.joueur = joueur;
                 res.redirect('/jeu/1');
             }
         });

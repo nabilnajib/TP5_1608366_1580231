@@ -14,6 +14,7 @@ var router = express.Router();
  * @param id Id du joueur optionnel
  */
 router.get('/:id?', function(req, res) {
+
     if (req.params.id) {
         Joueur.findById(req.params.id, function(err, joueur) {
             if (err) {
@@ -156,6 +157,7 @@ router.delete('/avancement/:id', function(req, res) {
         }
     });
 });
+
 
 module.exports = router;
 
