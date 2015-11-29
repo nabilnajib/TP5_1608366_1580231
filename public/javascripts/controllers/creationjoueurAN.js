@@ -1,18 +1,58 @@
-var myApp = angular.module('myApp', ['ngCookies']);
+var myApp = angular.module('myApp', ['ngCookies', 'ngResource', 'ngRoute']);
 
-//myApp.factory('SharedData', function() {
-//    var shared = {};
-//
-//    return {
-//        set: function(value) {
-//            shared = value;
-//        },
-//        get: function() {
-//            return shared;
-//        }
-//    }
-//});
+myApp.config(function($locationProvider, $routeProvider) {
+    $locationProvider.html5Mode(false);
+    $routeProvider.when('http://localhost:3000/jeu/1', {
+        templateUrl: 'http://localhost:3000/jeu/78',
+        controller: 'homeController'
+    });
 
+});
+
+
+myApp.factory('ServicePage', function(){
+    var currentPageNumber =0, currentSectionContent= 0, currentPageContent= {};
+    return {
+        setPageNumber: function(pageNumber){
+            currentPageNumber = pageNumber;
+        },
+
+        getPageNumber: function() {
+            return currentPageNumber;
+        },
+
+        setSectionNumber: function(sectionNumber){
+            currentSectionContent = sectionNumber;
+        },
+
+        getSectionNumber: function() {
+            return currentSectionContent;
+        },
+
+        setPageContent: function(pageContent){
+            currentPageContent = pageContent;
+        },
+
+        getPageContent: function(){
+            return currentPageContent;
+        }
+
+    };
+});
+//http://stackoverflow.com/questions/20297638/call-function-inside-sce-trustashtml-string-in-angular-js
+myApp.directive('compileTemplate', function($compile, $parse){
+    return {
+        link: function(scope, element, attr){
+            var parsed = $parse(attr.ngBindHtml);
+            function getStringValue() { return (parsed(scope) || '').toString(); }
+
+            //Recompile if the template changes
+            scope.$watch(getStringValue, function() {
+                $compile(element, null, -9999)(scope);  //The -9999 makes it skip directives so that we do not recompile ourselves
+            });
+        }
+    }
+});
 
 myApp.controller('verifierFormualire', ['$scope', '$http', '$cookies', function($scope, $http, $cookies){
 
@@ -88,7 +128,7 @@ myApp.controller('statPlayer', function($scope, $http, $cookies){
         $scope.nbJoueurHabileteBase = joueur.habileteBase;
         $scope.nbJoueurHabileteTot = parseInt(joueur.habileteBase)+parseInt(joueur.endurancePlus);
         $scope.nbJoueurEnduranceBase = joueur.enduranceBase;
-        $scope.nbJoueurEnduranceBaseTot = parseInt(joueur.enduranceBase)+parseInt(joueur.endurancePlus);
+        $scope.nbJoueurEnduranceTot = parseInt(joueur.enduranceBase)+parseInt(joueur.endurancePlus);
         $scope.pieceOr = joueur.pieceOr;
         $scope.disciplines = joueur.disciplines;
         $scope.armes = joueur.armes;

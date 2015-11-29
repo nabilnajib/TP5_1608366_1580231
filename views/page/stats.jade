@@ -6,7 +6,7 @@ section#stats(ng-controller="statPlayer")
                 td
                     img(src="/images/points_endurance.png")
                 td
-                    p #[span#endurance_restante {{nbJoueurEnduranceBase}}] / #[span#endurance_total {{nbJoueurEnduranceBaseTot}}]
+                    p #[span#endurance_restante {{nbJoueurEnduranceBase}}] / #[span#endurance_total {{nbJoueurEnduranceTot}}]
             tr
                 td
                     img(src="/images/points_habilete.png")
@@ -16,7 +16,7 @@ section#stats(ng-controller="statPlayer")
                 td
                     img(src="/images/pieces_or.png")
                 td
-                    p #[span#pieceOr {{pieceOr}}] / #[span#endurance_total {{nbJoueurHabileteTot}}]
+                    p #[span#pieceOr {{pieceOr}}] / #[span#endurance_total {{nbJoueurEnduranceTot}}]
     div
         p Disciplines Kai
         ul#disciplines
@@ -36,4 +36,3 @@ section#stats(ng-controller="statPlayer")
                 p Objets Spéciaux
                 ul
                     li(ng-repeat="elem in objetsSpeciaux") {{elem}}
-
