@@ -25,10 +25,10 @@ function parseCookies (request) {
     return list;
 }
 router.get('/jeu/:joueurId', function(req, res) {
-        var joueurId = req.params.joueurId;
-        console.log(joueurId);
-        console.log('========= *** ++++++++++++');
-        res.render('page/pageTemp');
+    var joueurId = req.params.joueurId;
+    console.log(joueurId);
+    console.log('========= *** ++++++++++++');
+    res.render('page/pageTemp');
 });
 
 /**
@@ -36,28 +36,28 @@ router.get('/jeu/:joueurId', function(req, res) {
  * Le HTML des sous-sections de la page demandée sont combinées.
  *
  */
-//router.get('/jeu/:pageId', function(req, res, next) {
-//    var id = req.params.pageId;
-//    var htmlPage = u.chain(fs.readdirSync('views/page'))
-//        // On récupère les sous-sections de la page
-//        .filter(function(file) {
-//            return file.indexOf(id + '_') == 0;
-//        })
-//        // Pour chaque sous-section, on compile son Jade pour obtenir du HTML.
-//        .map(function(file) {
-//            var fn = jade.compile(fs.readFileSync('views/page/' + file, 'utf8'), {
-//                filename: path.join('views/page/', file)
-//            });
-//            return fn({name:'Oleg'}).trim();
-//        })
-//        // On combine chaque HTML obtenu un à la suite de l'autre.
-//        .join("");
-//
-//    res.render('page/pageJeu', {
-//        numeroPage: req.params.pageId,
-//        htmlPage: htmlPage
-//    });
-//});
+router.get('/jeu/:pageId', function(req, res, next) {
+    var id = req.params.pageId;
+    var htmlPage = u.chain(fs.readdirSync('views/page'))
+        // On récupère les sous-sections de la page
+        .filter(function(file) {
+            return file.indexOf(id + '_') == 0;
+        })
+        // Pour chaque sous-section, on compile son Jade pour obtenir du HTML.
+        .map(function(file) {
+            var fn = jade.compile(fs.readFileSync('views/page/' + file, 'utf8'), {
+                filename: path.join('views/page/', file)
+            });
+            return fn({name:'Oleg'}).trim();
+        })
+        // On combine chaque HTML obtenu un à la suite de l'autre.
+        .join("");
+
+    res.render('page/pageJeu', {
+        numeroPage: req.params.pageId,
+        htmlPage: htmlPage
+    });
+});
 
 router.get('/page', function(req, res, next) {
 //    var id = 1;
@@ -84,7 +84,7 @@ router.get('/page', function(req, res, next) {
 //        combat: page.combat
 //
 //    });
-   res.render('page/pageTemp');
+    res.render('page/pageTemp');
 });
 
 /**
@@ -118,7 +118,7 @@ router.get('/page/:pageId/:sectionId', function(req, res) {
         contentHtml += '</fieldset><input type="button" class ="button" ng-click="" value="Ajouter!"/></div>';
     }
     if(page.confirmation){
-        contentHtml += '<input type="button" class ="button" value="Confirmer!" ng-click="confirmBtn()"/>';
+        contentHtml += '<input type="button" data-id="'+"/"+id+"/"+section+'" class ="button" value="Confirmer!" ng-click="confirmBtn()"/>';
     }
     if(page.decision){
         contentHtml += '<div id="decision"> <img src="/images/decision.jpg"><div>';
@@ -153,6 +153,18 @@ router.get('/page/:pageId/:sectionId', function(req, res) {
                     contentHtml += '<a ng-click=\'goToPage($event)\' data-id="'+decisionA[i].page+'"> rendez-vous à la page ' + decisionA[i].page.split('/')[2] + '</a>';
                 }
             }
+        }
+
+        if(page.combat){
+
+            var combat = page.combat;
+            console.log(JSON.stringify(page.combat));
+            contentHtml += '<div id=choixCombat>';
+            contentHtml += '<p> habilete: ' +combat.habilete + '</p>';
+            contentHtml += '<p> habilete: ' +combat.endurance + '</p>';
+            contentHtml += '<input id="combattre" type="button" class ="button" data-id="'+combat.combattre+'" ng-click="combattre()" value="COMBATTRE"/>';
+            contentHtml += '<input id="fuir" type="button" class ="button" data-id="'+combat.fuirURL+'" ng-click="fuir()" value="FUIR"/>';
+            contentHtml += '</div>';
         }
         contentHtml += '</div></div>';
     }

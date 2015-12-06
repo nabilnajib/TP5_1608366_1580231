@@ -72,79 +72,79 @@ myApp.controller('verifierFormualire', ['$scope', '$http', '$cookies', function(
     }
 }]);
 myApp.controller('pagesCtrl', ['$scope', '$http', '$cookies','$sce',  function($scope, $http, $cookies, $sce){
-        var id = $cookies.get('joueurId');
+    var id = $cookies.get('joueurId');
 //        alert(id);
-        if(!id){
-            $http.get('/api/joueurs/').success(function(joueur) {
-                $cookies.put('joueurId', joueur[0]._id);
-                id = joueur[0]._id;
+    if(!id){
+        $http.get('/api/joueurs/').success(function(joueur) {
+            $cookies.put('joueurId', joueur[0]._id);
+            id = joueur[0]._id;
 //                alert(joueur[0].name);
-                $scope.nbJoueurName = joueur[0].name;
-                $scope.nbJoueurHabileteBase = joueur[0].habileteBase;
-                $scope.nbJoueurHabileteTot = parseInt(joueur[0].habileteBase)+parseInt(joueur[0].endurancePlus);
-                $scope.nbJoueurEnduranceBase = joueur[0].enduranceBase;
-                $scope.nbJoueurEnduranceTot = parseInt(joueur[0].enduranceBase)+parseInt(joueur[0].endurancePlus);
-                $scope.pieceOr = joueur[0].pieceOr;
-                $scope.disciplines = joueur[0].disciplines;
-                $scope.armes = joueur[0].armes;
-                $scope.objets = joueur[0].objets;
-                $scope.objetsSpeciaux = joueur[0].objetsSpeciaux;
-                $http.get('http://localhost:3000/api/joueurs/avancement/'+id).success(function(avancement) {
-                    var  pageid = avancement.pageId;
-                    var  sectionid = avancement.sectionId;
-                    $http.get('/page/'+pageid+'/'+sectionid).success(function(pageJson) {
-                        $scope.numeroPage = pageJson.id;
-                        $scope.contenuPage = $sce.trustAsHtml(pageJson.contenu);
-                        $scope.img = pageJson.img;
-                        $scope.decision = pageJson.decision;
-
-                    });
-                });
-
-            });
-
-        } else{
-
+            $scope.nbJoueurName = joueur[0].name;
+            $scope.nbJoueurHabileteBase = joueur[0].habileteBase;
+            $scope.nbJoueurHabileteTot = parseInt(joueur[0].habileteBase)+parseInt(joueur[0].endurancePlus);
+            $scope.nbJoueurEnduranceBase = joueur[0].enduranceBase;
+            $scope.nbJoueurEnduranceTot = parseInt(joueur[0].enduranceBase)+parseInt(joueur[0].endurancePlus);
+            $scope.pieceOr = joueur[0].pieceOr;
+            $scope.disciplines = joueur[0].disciplines;
+            $scope.armes = joueur[0].armes;
+            $scope.objets = joueur[0].objets;
+            $scope.objetsSpeciaux = joueur[0].objetsSpeciaux;
             $http.get('http://localhost:3000/api/joueurs/avancement/'+id).success(function(avancement) {
                 var  pageid = avancement.pageId;
                 var  sectionid = avancement.sectionId;
-                $http.get('http://localhost:3000/api/joueurs/'+id).success(function(joueur) {
-                    $scope.nbJoueurName = joueur.name;
-                    $scope.nbJoueurHabileteBase = joueur.habileteBase;
-                    $scope.nbJoueurHabileteTot = parseInt(joueur.habileteBase)+parseInt(joueur.endurancePlus);
-                    $scope.nbJoueurEnduranceBase = joueur.enduranceBase;
-                    $scope.nbJoueurEnduranceTot = parseInt(joueur.enduranceBase)+parseInt(joueur.endurancePlus);
-                    $scope.pieceOr = joueur.pieceOr;
-                    $scope.disciplines = joueur.disciplines;
-                    $scope.armes = joueur.armes;
-                    $scope.objets = joueur.objets;
-                    $scope.objetsSpeciaux = joueur.objetsSpeciaux;
-                });
                 $http.get('/page/'+pageid+'/'+sectionid).success(function(pageJson) {
                     $scope.numeroPage = pageJson.id;
                     $scope.contenuPage = $sce.trustAsHtml(pageJson.contenu);
                     $scope.img = pageJson.img;
                     $scope.decision = pageJson.decision;
+
                 });
             });
-        }
 
-        $scope.goToPage = function(obj){
-                var ids = angular.element(obj.currentTarget).attr('data-id');
-            var pageId = ids.split('/')[2], sectionId = ids.split('/')[3];
-                var id = $cookies.get('joueurId');
+        });
+
+    } else{
+
+        $http.get('http://localhost:3000/api/joueurs/avancement/'+id).success(function(avancement) {
+            var  pageid = avancement.pageId;
+            var  sectionid = avancement.sectionId;
+            $http.get('http://localhost:3000/api/joueurs/'+id).success(function(joueur) {
+                $scope.nbJoueurName = joueur.name;
+                $scope.nbJoueurHabileteBase = joueur.habileteBase;
+                $scope.nbJoueurHabileteTot = parseInt(joueur.habileteBase)+parseInt(joueur.endurancePlus);
+                $scope.nbJoueurEnduranceBase = joueur.enduranceBase;
+                $scope.nbJoueurEnduranceTot = parseInt(joueur.enduranceBase)+parseInt(joueur.endurancePlus);
+                $scope.pieceOr = joueur.pieceOr;
+                $scope.disciplines = joueur.disciplines;
+                $scope.armes = joueur.armes;
+                $scope.objets = joueur.objets;
+                $scope.objetsSpeciaux = joueur.objetsSpeciaux;
+            });
+            $http.get('/page/'+pageid+'/'+sectionid).success(function(pageJson) {
+                $scope.numeroPage = pageJson.id;
+                $scope.contenuPage = $sce.trustAsHtml(pageJson.contenu);
+                $scope.img = pageJson.img;
+                $scope.decision = pageJson.decision;
+            });
+        });
+    }
+
+    $scope.goToPage = function(obj){
+        var ids = angular.element(obj.currentTarget).attr('data-id');
+        var pageId = ids.split('/')[2], sectionId = ids.split('/')[3];
+        var id = $cookies.get('joueurId');
 //            alert(ids);
-                $http.get('/page/'+pageId+'/'+sectionId).success(function(pageJson) {
-                    $scope.numeroPage = pageJson.id;
-                    $scope.contenuPage = $sce.trustAsHtml(pageJson.contenu);
-                    $scope.img = pageJson.img;
-                    $scope.decision = pageJson.decision;
-                    $http.put('http://localhost:3000/api/joueurs/avancement/'+id+'/'+pageId+'/'+sectionId).success(function(avancement) {
+        $http.get('/page/'+pageId+'/'+sectionId).success(function(pageJson) {
+            $scope.numeroPage = pageJson.id;
+            $scope.contenuPage = $sce.trustAsHtml(pageJson.contenu);
+            $scope.img = pageJson.img;
+            $scope.decision = pageJson.decision;
+            $http.put('http://localhost:3000/api/joueurs/avancement/'+id+'/'+pageId+'/'+sectionId).success(function(avancement) {
 //                        alert(avancement.pageId);
-                    });
-                });
-        }
-        $scope.confirmBtn = function(){
-            alert("goToPage");
-        }
+            });
+        });
+    }
+    $scope.confirmBtn = function(){
+        alert("confirmer");
+    }
 }]);
