@@ -1,29 +1,20 @@
 var myApp = angular.module('myApp', ['ngCookies', 'ngResource', 'ngRoute']);
 
-//myApp.config(function($routeProvider) {
-//    $routeProvider.when('http://localhost:3000/jeu/1', {
-//        templateUrl: 'http://localhost:3000/jeu/1',
-//        controller: 'statPlayer'
-//    });
-//
-//});
 
+//http://stackoverflow.com/questions/20358140/ng-click-doesnt-fire-when-added-post-load
+myApp.directive('compileTemplate', function($compile, $parse){
+    return {
+        link: function(scope, element, attr){
+            var parsed = $parse(attr.ngBindHtml);
+            function getStringValue() { return (parsed(scope) || '').toString(); }
 
-//myApp.factory('ServicePage', function() {
-//    var savedData;
-//    function set(data) {
-//        savedData = data;
-//    }
-//    function get() {
-//        return savedData;
-//    }
-//
-//    return {
-//        set: set,
-//        get: get
-//    }
-//
-//});
+            //Recompile if the template changes
+            scope.$watch(getStringValue, function() {
+                $compile(element, null, -9999)(scope);  //The -9999 makes it skip directives so that we do not recompile ourselves
+            });
+        }
+    }
+});
 
 myApp.controller('verifierFormualire', ['$scope', '$http', '$cookies', function($scope, $http, $cookies){
 
@@ -81,7 +72,6 @@ myApp.controller('verifierFormualire', ['$scope', '$http', '$cookies', function(
     }
 }]);
 myApp.controller('pagesCtrl', ['$scope', '$http', '$cookies','$sce',  function($scope, $http, $cookies, $sce){
-
         var id = $cookies.get('joueurId');
 //        alert(id);
         if(!id){
@@ -138,32 +128,18 @@ myApp.controller('pagesCtrl', ['$scope', '$http', '$cookies','$sce',  function($
                 });
             });
         }
-        $scope.goToPage = function(pageId, sectionId){
+
+        $scope.goToPage = function(obj){
+                var ids = angular.element(obj.currentTarget).attr('data-id');
+//            alert(ids);
+                $http.get('/page/'+ids.split('/')[2]+'/'+ids.split('/')[3]).success(function(pageJson) {
+                    $scope.numeroPage = pageJson.id;
+                    $scope.contenuPage = $sce.trustAsHtml(pageJson.contenu);
+                    $scope.img = pageJson.img;
+                    $scope.decision = pageJson.decision;
+                });
+        }
+        $scope.confirmBtn = function(){
             alert("goToPage");
-            $http.get('/page/'+pageId+'/'+sectionId).success(function(pageJson) {
-                $scope.numeroPage = pageJson.id;
-                $scope.contenuPage = $sce.trustAsHtml(pageJson.contenu);
-                $scope.img = pageJson.img;
-                $scope.decision = pageJson.decision;
-            });
         }
 }]);
-
-//http://stackoverflow.com/questions/20297638/call-function-inside-sce-trustashtml-string-in-angular-js
-//myApp.directive('compileTemplate', function($compile, $parse){
-//    return {
-//        link: function(scope, element, attr){
-//            var parsed = $parse(attr.ngBindHtml);
-//            function getStringValue() { return (parsed(scope) || '').toString(); }
-//            alert('test');
-//            //Recompile if the template changes
-//            scope.$watch(getStringValue, function() {
-//                $compile(element, null, -9999)(scope);  //The -9999 makes it skip directives so that we do not recompile ourselves
-//            });
-//        }
-//    }
-//});
-
-m
-//verifierFormualire.$inject=['$scope', 'ServicePage'];
-//pagesCtrl.$inject=['$scope', 'ServicePage'];

@@ -98,14 +98,13 @@ router.get('/page/:pageId/:sectionId', function(req, res) {
     var page = u.find(pagesJeu.pages, function(page) {
         return page.id == id;
     });
-    console.log(JSON.stringify(page));
+//    console.log(JSON.stringify(page));
     for(i=0; i< page.contenu.length; i++){
         if(page.contenu[i].text){
             contentHtml += "<p>" + page.contenu[i].text + "</p>";
         }
         if(page.contenu[i].img){
             contentHtml += "<img src=" + page.contenu[i].img + ">";
-
         }
     }
     if(page.ajouterObjets){
@@ -119,7 +118,7 @@ router.get('/page/:pageId/:sectionId', function(req, res) {
         contentHtml += '</fieldset><input type="button" class ="button" ng-click="" value="Ajouter!"/></div>';
     }
     if(page.confirmation){
-        contentHtml += '<input type="button" class ="button" value="Confirmer!" ng-click=""/>';
+        contentHtml += '<input type="button" class ="button" value="Confirmer!" ng-click="confirmBtn()"/>';
     }
     if(page.decision){
         contentHtml += '<div id="decision"> <img src="/images/decision.jpg"><div>';
@@ -127,12 +126,15 @@ router.get('/page/:pageId/:sectionId', function(req, res) {
             var decis = u.find(decisionJs.decisions, function(decis) {
                 return decis.id == id;
             });
-            for(var i = 0; i < decis.decision.length; i++){
-                var decision = decis.decision;
+//            console.log(decis);
+            for( i = 0; i < decis.decision.length; i++){
+                var decisionE = decis.decision;
                 contentHtml += "<p>";
-                if(decision[i].text){
-                    contentHtml += "<p>" + decision[i].text + "</p>";
-                    contentHtml += '<a ng-click="goToPage(' + decision[i].page.split('/')[2] + ',1)" data-id="'+decision[i].page+'"> rendez-vous à la page ' + decision[i].page.split('/')[2] + '</a>';
+                if(decisionE[i].text){
+                    contentHtml += "<p>" + decisionE[i].text + "</p>";
+                }
+                if(decisionE[i].page){
+                    contentHtml += '<a ng-click=\'goToPage($event)\' data-id="'+decisionE[i].page+'"> rendez-vous à la page ' + decisionE[i].page.split('/')[2] + '</a>';
                 }
             }
 //            console.log(page.decision+"===========>"+decis.decision[0].page);
@@ -141,12 +143,14 @@ router.get('/page/:pageId/:sectionId', function(req, res) {
             var decisAlea = u.find(decisionsAleatoire.decisionsAleatoire, function(decisAlea) {
                 return decisAlea.id == id;
             });
-            for(var i = 0; i < decisAlea.decision.length; i++){
-                var decision = decisAlea.decision;
+            for( i = 0; i < decisAlea.decision.length; i++){
+                var decisionA = decisAlea.decision;
                 contentHtml += "<p>";
-                if(decision[i].text){
-                    contentHtml += "<p>" + decision[i].text + "</p>";
-                    contentHtml += '<a ng-click="goToPage(' + decision[i].page.split('/')[2] + ',1)" data-id="'+decision[i].page+'"> rendez-vous à la page ' + decision[i].page.split('/')[2] + '</a>';
+                if(decisionA[i].text){
+                    contentHtml += "<p>" + decisionA[i].text + "</p>";
+                }
+                if(decisionA[i].page){
+                    contentHtml += '<a ng-click=\'goToPage($event)\' data-id="'+decisionA[i].page+'"> rendez-vous à la page ' + decisionA[i].page.split('/')[2] + '</a>';
                 }
             }
         }
