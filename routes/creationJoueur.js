@@ -20,7 +20,7 @@ router.get('/creationJoueur', function(req, res, next) {
 });
 
 // POST page de création du joueur
-router.post('/jeu/1', function(req, res) {
+router.post('/page', function(req, res) {
     //console.log(req);
     var erreursMsg = [];
 
@@ -79,7 +79,7 @@ router.post('/jeu/1', function(req, res) {
                 .on('complete', function(data, response) {
                    // console.log(response);
                 });
-                res.redirect('/jeu/1');
+                res.redirect('/page');
             }
         });
     } else {

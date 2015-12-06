@@ -4,7 +4,7 @@ block head
     link(rel="stylesheet", href="/stylesheets/pageJeu.css")
 
 block content
-    main
+    main(ng-controller="pagesCtrl")
         div#title
             img(src="/images/pageTitre.png")
             p#numeroPage= numeroPage

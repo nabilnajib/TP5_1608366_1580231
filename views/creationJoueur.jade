@@ -4,7 +4,7 @@ block head
     link(rel="stylesheet", href="/stylesheets/creationJoueur.css")
 block content
     img(src="/images/loup_solitaire.png")
-    section
+    section(ng-controller="verifierFormualire")
         div
             div(ng-show="joueurCounter" id="affichageJoueur" ng-click="load()")
                 h1 Personnage existant
@@ -21,7 +21,7 @@ block content
                 ul
                     each e in erreursMsg
                         li=e
-            form(action="/jeu/1" method="post" name="userForm" novalidate)
+            form(action="/page" method="post" name="userForm" novalidate)
                 fieldset
                     legend Ajouter un joueur
                     div
