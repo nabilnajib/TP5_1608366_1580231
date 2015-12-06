@@ -131,12 +131,17 @@ myApp.controller('pagesCtrl', ['$scope', '$http', '$cookies','$sce',  function($
 
         $scope.goToPage = function(obj){
                 var ids = angular.element(obj.currentTarget).attr('data-id');
+            var pageId = ids.split('/')[2], sectionId = ids.split('/')[3];
+                var id = $cookies.get('joueurId');
 //            alert(ids);
-                $http.get('/page/'+ids.split('/')[2]+'/'+ids.split('/')[3]).success(function(pageJson) {
+                $http.get('/page/'+pageId+'/'+sectionId).success(function(pageJson) {
                     $scope.numeroPage = pageJson.id;
                     $scope.contenuPage = $sce.trustAsHtml(pageJson.contenu);
                     $scope.img = pageJson.img;
                     $scope.decision = pageJson.decision;
+                    $http.put('http://localhost:3000/api/joueurs/avancement/'+id+'/'+pageId+'/'+sectionId).success(function(avancement) {
+//                        alert(avancement.pageId);
+                    });
                 });
         }
         $scope.confirmBtn = function(){

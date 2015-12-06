@@ -138,6 +138,28 @@ router.put('/avancement/:joueurId', function(req, res) {
         }
     });
 });
+/**
+ * Modifie l'état courant du joueur.
+ */
+router.put('/avancement/:joueurId/:pageId/:sectionId', function(req, res) {
+    Avancement.findOne({joueurId: req.params.joueurId}, function(err, avancement) {
+        if (err) {
+            res.send(err);
+        } else {
+            console.log(req.params.pageId+" =====  "+ req.params.sectionId);
+            avancement.pageId = req.params.pageId ? req.params.pageId : avancement.pageId;
+            avancement.sectionId = req.params.sectionId ? req.params.sectionId : avancement.sectionId;
+            avancement.combat = req.body.combat ? req.body.combat : avancement.combat;
+            avancement.save(function(err) {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.json({message: "L'avancement du joueur " + req.params.joueurId + " a été correctement mis à jour."});
+                }
+            });
+        }
+    });
+});
 
 /**
  * Supprime l'état courant du joueur.
