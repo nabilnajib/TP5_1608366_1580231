@@ -98,7 +98,7 @@ router.get('/page/:pageId/:sectionId', function(req, res) {
     var page = u.find(pagesJeu.pages, function(page) {
         return page.id == id;
     });
-//    console.log(JSON.stringify(page));
+    console.log(JSON.stringify(page.combat));
     for(i=0; i< page.contenu.length; i++){
         if(page.contenu[i].text){
             contentHtml += "<p>" + page.contenu[i].text + "</p>";
@@ -106,6 +106,17 @@ router.get('/page/:pageId/:sectionId', function(req, res) {
         if(page.contenu[i].img){
             contentHtml += "<img src=" + page.contenu[i].img + ">";
         }
+    }
+    if(page.combat){
+        console.log('=====================');
+        var combat = page.combat;
+//            console.log(JSON.stringify(page.combat));
+        contentHtml += '<div id=choixCombat>';
+        contentHtml += '<p> habilete: ' +combat.habilete + '</p>';
+        contentHtml += '<p> habilete: ' +combat.endurance + '</p>';
+        contentHtml += '<input id="combattre" type="button" class ="button" data-id="'+combat.combattre+'" ng-click="combattre($event)" value="COMBATTRE"/>';
+        contentHtml += '<input id="fuir" type="button" class ="button" data-id="'+combat.fuirURL+'" ng-click="fuir($event)" value="FUIR"/>';
+        contentHtml += '</div>';
     }
     if(page.ajouterObjets){
         var choiceObject = page.ajouterObjets;
@@ -155,17 +166,7 @@ router.get('/page/:pageId/:sectionId', function(req, res) {
             }
         }
 
-        if(page.combat){
 
-            var combat = page.combat;
-            console.log(JSON.stringify(page.combat));
-            contentHtml += '<div id=choixCombat>';
-            contentHtml += '<p> habilete: ' +combat.habilete + '</p>';
-            contentHtml += '<p> habilete: ' +combat.endurance + '</p>';
-            contentHtml += '<input id="combattre" type="button" class ="button" data-id="'+combat.combattre+'" ng-click="combattre()" value="COMBATTRE"/>';
-            contentHtml += '<input id="fuir" type="button" class ="button" data-id="'+combat.fuirURL+'" ng-click="fuir()" value="FUIR"/>';
-            contentHtml += '</div>';
-        }
         contentHtml += '</div></div>';
     }
 

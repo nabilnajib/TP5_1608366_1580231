@@ -15,7 +15,9 @@ myApp.directive('compileTemplate', function($compile, $parse){
         }
     }
 });
-
+/**
+ * Controlleur du formulaire
+ */
 myApp.controller('verifierFormualire', ['$scope', '$http', '$cookies', function($scope, $http, $cookies){
 
     $scope.isValid = true;
@@ -27,6 +29,9 @@ myApp.controller('verifierFormualire', ['$scope', '$http', '$cookies', function(
         $scope.joueurCounter= (data.length === 0) ? false : true;
         $scope.nbJoueur = data;
     });
+    /**
+     * Fonction invoquée pour la verification le nombre de checkbox
+     */
     $scope.submitForm = function() {
         //alert('test');
         var countDiscip = 0;
@@ -41,6 +46,9 @@ myApp.controller('verifierFormualire', ['$scope', '$http', '$cookies', function(
         });
         $scope.isValid = (countDiscip == 5 && countArm == 2 && $scope.joueurName.length !== 0);
     }
+    /**
+     * Fonction invoquée lors du submit du formulaire
+     */
     $scope.submitButton = function($event){
         if($scope.isValid && $scope.joueurName.length !== 0) {
             alert('Le joueur est ajouté');
@@ -52,6 +60,10 @@ myApp.controller('verifierFormualire', ['$scope', '$http', '$cookies', function(
             alert('NOT GOOD!!!');
         }
     }
+    /**
+     * Permet de supprimer le joueur choisi
+     * @param obj pour recevoir l'evenement de la page
+     */
     $scope.supprimerJoueur = function(obj){
         var id = angular.element(obj.currentTarget).attr('data-id');
         if(confirm('Est ce que vous voulez supprimer le joueur?')){
@@ -63,6 +75,10 @@ myApp.controller('verifierFormualire', ['$scope', '$http', '$cookies', function(
             });
         }
     }
+    /**
+     * Permet d'aller a la page dans l'avancement du joueur
+     * @param obj  pour capter le id du joueur
+     */
     $scope.goToPlayerPage = function(obj){
         //$scope.avancement = {};
         var id = angular.element(obj.currentTarget).attr('data-id');
@@ -71,9 +87,13 @@ myApp.controller('verifierFormualire', ['$scope', '$http', '$cookies', function(
         window.location.href = '/page';
     }
 }]);
+/**
+ * Controlleur des pages de jeu
+ */
 myApp.controller('pagesCtrl', ['$scope', '$http', '$cookies','$sce',  function($scope, $http, $cookies, $sce){
     var id = $cookies.get('joueurId');
-//        alert(id);
+
+//Code invoquer lors d'un nouveau joueur
     if(!id){
         $http.get('/api/joueurs/').success(function(joueur) {
             $cookies.put('joueurId', joueur[0]._id);
@@ -89,9 +109,18 @@ myApp.controller('pagesCtrl', ['$scope', '$http', '$cookies','$sce',  function($
             $scope.armes = joueur[0].armes;
             $scope.objets = joueur[0].objets;
             $scope.objetsSpeciaux = joueur[0].objetsSpeciaux;
+            $scope.possedeGuerison = false;
+
             $http.get('http://localhost:3000/api/joueurs/avancement/'+id).success(function(avancement) {
                 var  pageid = avancement.pageId;
                 var  sectionid = avancement.sectionId;
+                if(pageid !== 1 && ($scope.nbJoueurEnduranceTot > $scope.nbJoueurEnduranceBase)){
+                    joueur.disciplines.forEach(function(elem){
+                        if(elem === 'guerison'){
+                            $scope.possedeGuerison = true;
+                        }
+                    });
+                }
                 $http.get('/page/'+pageid+'/'+sectionid).success(function(pageJson) {
                     $scope.numeroPage = pageJson.id;
                     $scope.contenuPage = $sce.trustAsHtml(pageJson.contenu);
@@ -102,7 +131,7 @@ myApp.controller('pagesCtrl', ['$scope', '$http', '$cookies','$sce',  function($
             });
 
         });
-
+//Code invoquer lorsqu'on choisi un joueur parmi la liste
     } else{
 
         $http.get('http://localhost:3000/api/joueurs/avancement/'+id).success(function(avancement) {
@@ -119,6 +148,15 @@ myApp.controller('pagesCtrl', ['$scope', '$http', '$cookies','$sce',  function($
                 $scope.armes = joueur.armes;
                 $scope.objets = joueur.objets;
                 $scope.objetsSpeciaux = joueur.objetsSpeciaux;
+                $scope.possedeGuerison = false;
+                if(pageid !== 1 && ($scope.nbJoueurEnduranceTot > $scope.nbJoueurEnduranceBase)){
+                    joueur.disciplines.forEach(function(elem){
+                        if(elem === 'guerison'){
+                            $scope.possedeGuerison = true;
+                        }
+                    });
+                }
+
             });
             $http.get('/page/'+pageid+'/'+sectionid).success(function(pageJson) {
                 $scope.numeroPage = pageJson.id;
@@ -128,7 +166,10 @@ myApp.controller('pagesCtrl', ['$scope', '$http', '$cookies','$sce',  function($
             });
         });
     }
-
+    /**
+     * Permet de rediriger vers la page de decision
+     * @param obj Pour capter l'evenemnt de la page et d'identifier les ids de la page et la section
+     */
     $scope.goToPage = function(obj){
         var ids = angular.element(obj.currentTarget).attr('data-id');
         var pageId = ids.split('/')[2], sectionId = ids.split('/')[3];
@@ -144,7 +185,40 @@ myApp.controller('pagesCtrl', ['$scope', '$http', '$cookies','$sce',  function($
             });
         });
     }
+    /**
+     * Est invoquée lorsque le joueur la choisi
+     */
     $scope.confirmBtn = function(){
         alert("confirmer");
+    }
+    /**
+     * permet au joueur de combattre
+     * @param $event
+     */
+    $scope.combattre = function($event){
+        alert("combattre");
+    }
+    /**
+     * permet au joueur de fuir
+     * @param $event
+     */
+    $scope.fuir = function($event){
+        alert("fuir");
+    }
+    /**
+     * Permet au joueur de confirmer le bonus de la guérison et de mettre a jour sa valeur dans la bd
+     */
+    $scope.confirmGuerison = function(){
+        var id = $cookies.get('joueurId');
+        $scope.possedeGuerison = false;
+        $scope.nbJoueurEnduranceBase++;
+        $http.get('http://localhost:3000/api/joueurs/'+id).success(function(joueur) {
+            joueur.enduranceBase = parseInt(joueur.enduranceBase) +1;
+
+            $http.put('http://localhost:3000/api/joueurs/'+id+'/'+encodeURIComponent(joueur)).success(function(avancement) {
+//                        alert(avancement.pageId);
+            });
+        });
+
     }
 }]);

@@ -63,6 +63,36 @@ router.put('/:id', function(req, res) {
 });
 
 /**
+ * Modifie la représentation du joueur.
+ * @param id Id du joueur
+ */
+router.put('/:id/:jr', function(req, res) {
+
+    var id = req.params.id;
+    var player = decodeURIComponent(req.params.jr);
+    Joueur.findById(id, function(err, joueur) {
+
+        if (err) {
+            res.send(err);
+        } else {
+            joueur.pieceOr = player.pieceOr ? player.pieceOr : joueur.pieceOr;
+            joueur.armes = player.armes ? player.armes : joueur.armes;
+            joueur.objets = player.objets ? player.objets : joueur.objets;
+            joueur.objetsSpeciaux = player.objectsSpeciaux ? player.objetsSpeciaux : joueur.objetsSpeciaux;
+            joueur.enduranceBase = player.enduranceBase ? player.enduranceBase : joueur.enduranceBase;
+            joueur.save(function(err) {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.json({message: "Le joueur a été correctement mis à jour."});
+                }
+            });
+            console.log("+++++++++++++++++++++++++ "+joueur.enduranceBase + "+++++++++++++++++++++++++ "+JSON.stringify(player));
+        }
+    });
+});
+
+/**
  * Supprime un joueur de la BD selon l'ID.
  * @param id Id du joueur
  */
